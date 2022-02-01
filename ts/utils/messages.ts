@@ -227,6 +227,7 @@ const extractCTA = (
 ): Option<CTAS> =>
   fromPredicate((t: string) => FM.test(t))(text)
     .mapNullable(m => {
+      console.log("I am extracting CTA", text, serviceMetadata, serviceId);
       try {
         return FM<MessageCTA>(m).attributes;
       } catch (e) {
