@@ -457,8 +457,11 @@ class IdentificationModal extends React.PureComponent<Props, State> {
     const { identificationProgressState, isFingerprintEnabled } = this.props;
 
     if (identificationProgressState.kind !== "started") {
+      console.log("sono qu0");
       return null;
     }
+
+    console.log("sono qua");
 
     // The identification is started, we need to show the modal
     const { pin, isValidatingTask, identificationCancelData, shufflePad } =
@@ -491,7 +494,7 @@ class IdentificationModal extends React.PureComponent<Props, State> {
     return !this.state.canInsertPinTooManyAttempts ? (
       IdentificationLockModal({ countdown })
     ) : (
-      <Modal onRequestClose={onRequestCloseHandler}>
+      <Modal onRequestClose={onRequestCloseHandler} visible={true}>
         <BaseScreenComponent
           accessibilityEvents={{ avoidNavigationEventsUsage: true }}
           accessibilityLabel={I18n.t("identification.title")}
@@ -574,7 +577,6 @@ class IdentificationModal extends React.PureComponent<Props, State> {
 
   /**
    * Return the proper instruction based on the avaiable identification method
-   * @param biometrySimplePrintableType
    */
   private getInstructions(): string {
     // We have a failure cause the biometry auth responded with a DeviceLocked or DeviceLockedPermanent code.

@@ -10,6 +10,7 @@ import {
 import { identificationRequest } from "../../store/actions/identification";
 import { startTimer } from "../../utils/timer";
 import { watchNotificationSaga } from "./watchNotificationSaga";
+import ZendDesk from "io-react-native-zendesk";
 
 /**
  * Listen to APP_STATE_CHANGE_ACTION and:
@@ -46,6 +47,7 @@ export function* watchApplicationActivitySaga(): IterableIterator<Effect> {
            * screen being displayed for a while before the IdentificationScreen when the user
            * focuses again on the app
            */
+          ZendDesk.dismiss();
           yield put(identificationRequest());
         }
         // Start the background timer
@@ -54,6 +56,7 @@ export function* watchApplicationActivitySaga(): IterableIterator<Effect> {
           yield call(startTimer, backgroundActivityTimeoutMillis);
           identificationBackgroundTimer = undefined;
           // Timer fired we need to identify the user again
+          ZendDesk.dismiss();
           yield put(identificationRequest());
         });
       } else if (

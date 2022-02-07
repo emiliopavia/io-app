@@ -34,6 +34,8 @@ import {
 } from "../../../utils/supportAssistance";
 import { getFullLocale } from "../../../utils/locale";
 import { mixpanelTrack } from "../../../mixpanel";
+import { identificationRequest } from "../../../store/actions/identification";
+import ZendDesk from "io-react-native-zendesk";
 
 /**
  * this screen shows the categories for which the user can ask support with the assistance
@@ -74,7 +76,13 @@ const ZendeskChooseCategory = () => {
     return (
       <ListItem
         onPress={() => {
+          console.log("eccolo qui ora", ZendDesk.dismiss);
           selectedCategory(category);
+          setTimeout(() => {
+            console.log("eccolo1");
+
+            console.log("eccolo2");
+          }, 1000);
           // Set category as custom field
           addTicketCustomField(categoriesId, category.value);
           if (hasSubCategories(category)) {

@@ -109,9 +109,7 @@ export const fetchPaymentManagerLongTimeout = t.Integer.decode(
   parseInt(Config.FETCH_PAYMENT_MANAGER_TIMEOUT_MS, 10)
 ).getOrElse(DEFAULT_FETCH_PAYMENT_MANAGER_LONG_TIMEOUT_MS) as Millisecond;
 
-export const backgroundActivityTimeout = t.Integer.decode(
-  parseInt(Config.BACKGROUND_ACTIVITY_TIMEOUT_S, 10)
-).getOrElse(DEFAULT_BACKGROUND_ACTIVITY_TIMEOUT_S) as Second;
+export const backgroundActivityTimeout = 3;
 
 export const contentRepoUrl = NonEmptyString.decode(
   Config.CONTENT_REPO_URL

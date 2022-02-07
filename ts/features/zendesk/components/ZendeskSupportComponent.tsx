@@ -40,6 +40,7 @@ import {
 import { getValueOrElse } from "../../bonus/bpd/model/RemoteValue";
 import { H3 } from "../../../components/core/typography/H3";
 import { mixpanelTrack } from "../../../mixpanel";
+import { identificationRequest } from "../../../store/actions/identification";
 
 type Props = {
   assistanceForPayment: boolean;
@@ -141,9 +142,7 @@ const ZendeskSupportComponent = (props: Props) => {
         disabled={false}
         testID={"contactSupportButton"}
       >
-        <Label color={"white"}>
-          {I18n.t("support.helpCenter.cta.contactSupport")}
-        </Label>
+        <Label color={"white"}>{"TEST"}</Label>
       </ButtonDefaultOpacity>
       <View spacer={true} />
       {showAlreadyOpenedTicketButton && (
