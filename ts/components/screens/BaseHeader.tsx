@@ -194,6 +194,15 @@ class BaseHeaderComponent extends React.PureComponent<Props, State> {
     } = this.props;
 
     const maybeAccessibilityLabel = maybeNotNullyString(accessibilityLabel);
+    const right = (
+      <Right>
+        {this.renderRight() ?? <ButtonDefaultOpacity transparent={true} />}
+        {fromNullable(this.props.accessibilityEvents).fold(
+          true,
+          ({ avoidNavigationEventsUsage }) => !avoidNavigationEventsUsage
+        ) && <NavigationEvents onDidFocus={this.handleFocus} />}
+      </Right>
+    );
     return (
       <AppHeader
         backgroundColor={backgroundColor}
@@ -222,7 +231,7 @@ class BaseHeaderComponent extends React.PureComponent<Props, State> {
           </Body>
         )}
 
-        {this.renderRight()}
+        {right}
       </AppHeader>
     );
   }
@@ -243,45 +252,43 @@ class BaseHeaderComponent extends React.PureComponent<Props, State> {
       showInstabugChat !== false &&
       choosenTool === ToolEnum.instabug;
 
-    return (
-      <Right>
-        {isSearchAvailable?.enabled && (
-          <SearchButton
-            searchType={isSearchAvailable.searchType}
-            onSearchTap={isSearchAvailable.onSearchTap}
-          />
-        )}
-        {hasInstabugChat && <InstabugChatsComponent />}
-
-        {onShowHelp && !isSearchEnabled && (
-          <HelpButton onShowHelp={onShowHelp} />
-        )}
-
-        {customRightIcon && !isSearchEnabled && (
-          <ButtonDefaultOpacity
-            onPress={customRightIcon.onPress}
-            transparent={true}
-            accessible={customRightIcon.accessibilityLabel !== undefined}
-            accessibilityLabel={customRightIcon.accessibilityLabel}
-          >
-            {!isStringNullyOrEmpty(customRightIcon.iconName) && (
-              <IconFont name={customRightIcon.iconName} />
-            )}
-          </ButtonDefaultOpacity>
-        )}
-
-        {/* if no right button has been added, add a hidden one in order to make the body always centered on screen */}
-        {!customRightIcon &&
-          !isSearchAvailable &&
-          !onShowHelp &&
-          !hasInstabugChat && <ButtonDefaultOpacity transparent={true} />}
-
-        {fromNullable(this.props.accessibilityEvents).fold(
-          true,
-          ({ avoidNavigationEventsUsage }) => !avoidNavigationEventsUsage
-        ) && <NavigationEvents onDidFocus={this.handleFocus} />}
-      </Right>
+    const searchButton = isSearchAvailable?.enabled && (
+      <SearchButton
+        searchType={isSearchAvailable.searchType}
+        onSearchTap={isSearchAvailable.onSearchTap}
+      />
     );
+    const instabugChat = hasInstabugChat && <InstabugChatsComponent />;
+    const helpButton = onShowHelp && !isSearchEnabled && (
+      <HelpButton onShowHelp={onShowHelp} />
+    );
+    const customRightButton = customRightIcon && !isSearchEnabled && (
+      <ButtonDefaultOpacity
+        onPress={customRightIcon.onPress}
+        transparent={true}
+        accessible={customRightIcon.accessibilityLabel !== undefined}
+        accessibilityLabel={customRightIcon.accessibilityLabel}
+      >
+        {!isStringNullyOrEmpty(customRightIcon.iconName) && (
+          <IconFont name={customRightIcon.iconName} />
+        )}
+      </ButtonDefaultOpacity>
+    );
+    if (
+      [searchButton, instabugChat, helpButton, customRightButton].some(
+        c => c !== undefined && c !== false
+      )
+    ) {
+      return (
+        <>
+          {searchButton}
+          {instabugChat}
+          {helpButton}
+          {customRightButton}
+        </>
+      );
+    }
+    return null;
   };
 
   private renderGoBack = () => {
