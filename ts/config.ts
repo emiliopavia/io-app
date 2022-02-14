@@ -143,3 +143,6 @@ export const maximumItemsFromAPI: number = 100;
 
 export const testOverlayCaption: string | undefined =
   Config.TEST_OVERLAY_CAPTION;
+
+export const newProfileScreenEnabled: boolean =
+  Config.NEW_PROFILE_SCREEN === "YES";
