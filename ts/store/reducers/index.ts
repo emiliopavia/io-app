@@ -16,6 +16,7 @@ import {
 import { Action } from "../actions/types";
 import createSecureStorage from "../storages/keychain";
 import { DateISO8601Transform } from "../transforms/dateISO8601Tranform";
+import userProfileReducer from "../../features/profile/reducers/userProfile";
 import appStateReducer from "./appState";
 import authenticationReducer, {
   AuthenticationState,
@@ -133,7 +134,8 @@ export const appReducer: Reducer<GlobalState, Action> = combineReducers<
   payments: paymentsReducer,
   content: contentReducer,
   emailValidation: emailValidationReducer,
-  crossSessions: crossSessionsReducer
+  crossSessions: crossSessionsReducer,
+  userProfile: userProfileReducer
 });
 
 export function createRootReducer(
