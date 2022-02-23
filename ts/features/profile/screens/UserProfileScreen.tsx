@@ -26,6 +26,7 @@ import NameSurnameIcon from "../../../../img/assistance/nameSurname.svg";
 import EmailIcon from "../../../../img/assistance/email.svg";
 import FiscalCodeIcon from "../../../../img/assistance/fiscalCode.svg";
 import InfoIcon from "../../../../img/assistance/info.svg";
+import { showToast } from "../../../utils/showToast";
 
 type Props = ReturnType<typeof mapDispatchToProps> &
   ReturnType<typeof mapStateToProps>;
@@ -47,6 +48,10 @@ const UserProfileScreen = (props: Props): React.ReactElement => {
   useOnFirstRender(() => {
     props.loadProfile();
   });
+
+  if (pot.isError(profile)) {
+    showToast(I18n.t("global.genericError"), "danger");
+  }
 
   return (
     <BaseScreenComponent
