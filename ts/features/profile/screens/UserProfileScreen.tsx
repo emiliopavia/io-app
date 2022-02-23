@@ -14,7 +14,8 @@ import {
   selectUserEmail,
   selectUserFiscalCode,
   selectUserFullName,
-  selectUserProfile
+  selectUserProfile,
+  selectUserProfileDeletionStatus
 } from "../reducers/userProfile";
 import BaseScreenComponent from "../../../components/screens/BaseScreenComponent";
 import I18n from "../../../i18n";
@@ -27,6 +28,9 @@ import EmailIcon from "../../../../img/assistance/email.svg";
 import FiscalCodeIcon from "../../../../img/assistance/fiscalCode.svg";
 import InfoIcon from "../../../../img/assistance/info.svg";
 import { showToast } from "../../../utils/showToast";
+import { loadUserDataProcessing } from "../../../store/actions/userDataProcessing";
+import { UserDataProcessingChoiceEnum } from "../../../../definitions/backend/UserDataProcessingChoice";
+import UserProfileSwitch from "../components/UserProfileSwitch";
 
 type Props = ReturnType<typeof mapDispatchToProps> &
   ReturnType<typeof mapStateToProps>;
@@ -47,6 +51,7 @@ const UserProfileScreen = (props: Props): React.ReactElement => {
 
   useOnFirstRender(() => {
     props.loadProfile();
+    props.loadProfileDeletionStatus();
   });
 
   if (pot.isError(profile)) {
@@ -74,46 +79,56 @@ const UserProfileScreen = (props: Props): React.ReactElement => {
             <UserProfileItem
               title={I18n.t("profile.data.list.nameSurname")}
               subtitle={props.fullName}
-              icon={<NameSurnameIcon {...iconProps}></NameSurnameIcon>}
+              icon={<NameSurnameIcon {...iconProps} />}
             />
           )}
           {props.fiscalCode && (
             <UserProfileItem
               title={I18n.t("profile.fiscalCode.fiscalCode")}
               subtitle={props.fiscalCode}
-              icon={<FiscalCodeIcon {...iconProps}></FiscalCodeIcon>}
+              icon={<FiscalCodeIcon {...iconProps} />}
             />
           )}
           {props.email && (
             <UserProfileItem
               title={I18n.t("profile.data.list.email")}
               subtitle={props.email}
-              icon={<EmailIcon {...iconProps}></EmailIcon>}
+              icon={<EmailIcon {...iconProps} />}
             />
           )}
-          {props.birthdate && (
+          {props.birthdate?.toLocaleDateString && (
             <UserProfileItem
               title={I18n.t("profile.data.list.birthdate")}
               subtitle={props.birthdate.toLocaleDateString()}
-              icon={<InfoIcon {...iconProps}></InfoIcon>}
+              icon={<InfoIcon {...iconProps} />}
             />
           )}
+          <UserProfileSwitch
+            description={I18n.t("profile.main.privacy.removeAccount.title")}
+            value={props.deletionStatus}
+            onRetry={props.loadProfileDeletionStatus}
+          />
         </ScrollView>
-        {pot.isLoading(profile) && pot.isNone(profile) && <Loader></Loader>}
+        {pot.isLoading(profile) && pot.isNone(profile) && <Loader />}
       </SafeAreaView>
     </BaseScreenComponent>
   );
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  loadProfile: () => dispatch(getUserProfile.request())
+  loadProfile: () => dispatch(getUserProfile.request()),
+  loadProfileDeletionStatus: () =>
+    dispatch(
+      loadUserDataProcessing.request(UserDataProcessingChoiceEnum.DELETE)
+    )
 });
 
 const mapStateToProps = (state: GlobalState) => ({
   fullName: selectUserFullName(state),
   email: selectUserEmail(state),
   fiscalCode: selectUserFiscalCode(state),
-  birthdate: selectUserBirthdate(state)
+  birthdate: selectUserBirthdate(state),
+  deletionStatus: selectUserProfileDeletionStatus(state)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfileScreen);

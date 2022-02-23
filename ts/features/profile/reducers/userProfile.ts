@@ -2,12 +2,14 @@ import * as pot from "italia-ts-commons/lib/pot";
 import { getType } from "typesafe-actions";
 import { fromNullable, none, Option } from "fp-ts/lib/Option";
 import { createSelector } from "reselect";
+import { Pot } from "italia-ts-commons/lib/pot";
 import { InitializedProfile } from "../../../../definitions/backend/InitializedProfile";
 import { Action } from "../../../store/actions/types";
 import { getUserProfile } from "../actions";
 import { getErrorFromNetworkError } from "../../../utils/errors";
 import { GlobalState } from "../../../store/reducers/types";
 import { EmailAddress } from "../../../../definitions/backend/EmailAddress";
+import { UserDataProcessingStatusEnum } from "../../../../definitions/backend/UserDataProcessingStatus";
 
 export type UserProfileState = pot.Pot<InitializedProfile, Error>;
 
@@ -61,6 +63,36 @@ export const selectUserBirthdate = createSelector(
       .toOption(pot.map(userProfile, p => p.date_of_birth) || pot.none)
       .toUndefined()
 );
+
+export const selectUserProfileDeletionStatus = (
+  state: GlobalState
+): Pot<boolean, Error> => {
+  const toBoolean = (
+    status: UserDataProcessingStatusEnum | undefined
+  ): boolean => {
+    switch (status) {
+      case UserDataProcessingStatusEnum.PENDING:
+        return true;
+      case UserDataProcessingStatusEnum.WIP:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  return pot.fold(
+    state.userDataProcessing.DELETE,
+    () => pot.none as Pot<boolean, Error>,
+    () => pot.noneLoading,
+    v => pot.noneUpdating(toBoolean(v?.status)),
+    e => pot.noneError(e),
+    v =>
+      toBoolean(v?.status) ? pot.someUpdating(false, true) : pot.some(false),
+    v => pot.someLoading(toBoolean(v?.status)),
+    (v, _) => pot.someUpdating(toBoolean(v?.status), true),
+    (v, e) => pot.someError(toBoolean(v?.status), e)
+  );
+};
 
 const userProfileReducer = (
   state: UserProfileState = pot.none,
