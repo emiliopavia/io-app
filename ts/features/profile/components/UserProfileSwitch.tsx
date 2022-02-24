@@ -9,6 +9,7 @@ type Props = Readonly<{
   description: string;
   value: Pot<boolean, Error>;
   onRetry: () => void;
+  onEnable: () => void;
 }>;
 
 const styles = StyleSheet.create({
@@ -36,7 +37,11 @@ const UserProfileItem = (props: Props): React.ReactElement => (
     <View style={styles.row}>
       <Text style={styles.description}>{props.description}</Text>
       <View style={styles.switch}>
-        <RemoteSwitch value={props.value} onRetry={props.onRetry} />
+        <RemoteSwitch
+          value={props.value}
+          onRetry={props.onRetry}
+          onValueChange={value => (value ? props.onEnable() : undefined)}
+        />
       </View>
     </View>
     <Separator style={styles.separator} />

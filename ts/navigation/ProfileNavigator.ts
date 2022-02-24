@@ -23,6 +23,7 @@ import ProfileDataScreen from "../screens/profile/ProfileDataScreen";
 import SecurityScreen from "../screens/profile/SecurityScreen";
 import { newProfileScreenEnabled } from "../config";
 import UserProfileScreen from "../features/profile/screens/UserProfileScreen";
+import { profileDeletionRouteConfig } from "../features/profile/navigation/navigator";
 import ROUTES from "./routes";
 
 /**
@@ -95,7 +96,8 @@ const ProfileNavigator = createStackNavigator(
     },
     [ROUTES.PROFILE_REMOVE_ACCOUNT_SUCCESS]: {
       screen: RemoveAccountSuccess
-    }
+    },
+    ...profileDeletionRouteConfig
   },
   {
     // Let each screen handle the header and navigation

@@ -31,6 +31,8 @@ import { showToast } from "../../../utils/showToast";
 import { loadUserDataProcessing } from "../../../store/actions/userDataProcessing";
 import { UserDataProcessingChoiceEnum } from "../../../../definitions/backend/UserDataProcessingChoice";
 import UserProfileSwitch from "../components/UserProfileSwitch";
+import { useNavigationContext } from "../../../utils/hooks/useOnFocus";
+import PROFILE_DELETION_ROUTES from "../navigation/routes";
 
 type Props = ReturnType<typeof mapDispatchToProps> &
   ReturnType<typeof mapStateToProps>;
@@ -48,6 +50,7 @@ const iconProps = { width: 24, height: 24 };
 
 const UserProfileScreen = (props: Props): React.ReactElement => {
   const profile = useSelector(selectUserProfile);
+  const navigation = useNavigationContext();
 
   useOnFirstRender(() => {
     props.loadProfile();
@@ -107,6 +110,11 @@ const UserProfileScreen = (props: Props): React.ReactElement => {
             description={I18n.t("profile.main.privacy.removeAccount.title")}
             value={props.deletionStatus}
             onRetry={props.loadProfileDeletionStatus}
+            onEnable={() =>
+              navigation.navigate({
+                routeName: PROFILE_DELETION_ROUTES.START
+              })
+            }
           />
         </ScrollView>
         {pot.isLoading(profile) && pot.isNone(profile) && <Loader />}
