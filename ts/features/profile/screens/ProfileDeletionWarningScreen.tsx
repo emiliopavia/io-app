@@ -1,20 +1,57 @@
 import React from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
+import { Content } from "native-base";
+import { SafeAreaView } from "react-native";
+import { NavigationStackScreenProps } from "react-navigation-stack";
 import { GlobalState } from "../../../store/reducers/types";
 import { emptyContextualHelp } from "../../../utils/emptyContextualHelp";
 import BaseScreenComponent from "../../../components/screens/BaseScreenComponent";
+import { IOStyles } from "../../../components/core/variables/IOStyles";
+import { H1 } from "../../../components/core/typography/H1";
+import I18n from "../../../i18n";
+import { H4 } from "../../../components/core/typography/H4";
+import FooterWithButtons from "../../../components/ui/FooterWithButtons";
+import { navigateBack } from "../../../store/actions/navigation";
 
 type Props = ReturnType<typeof mapDispatchToProps> &
-  ReturnType<typeof mapStateToProps>;
+  ReturnType<typeof mapStateToProps> &
+  NavigationStackScreenProps;
 
-const ProfileDeletionWarningScreen = (props: Props): React.ReactElement => (
-  <BaseScreenComponent
-    goBack={true}
-    contextualHelp={emptyContextualHelp}
-    shouldAskForScreenshotWithInitialValue={false}
-  />
-);
+const ProfileDeletionWarningScreen = (props: Props): React.ReactElement => {
+  const cancelButtonProps = {
+    block: true,
+    light: true,
+    bordered: true,
+    onPress: () => navigateBack(),
+    title: I18n.t("global.buttons.cancel")
+  };
+
+  const requestButtonProps = {
+    block: true,
+    primary: true,
+    onPress: undefined,
+    title: I18n.t("global.buttons.continue")
+  };
+
+  return (
+    <BaseScreenComponent goBack={true} contextualHelp={emptyContextualHelp}>
+      <SafeAreaView style={IOStyles.flex}>
+        <Content>
+          <H1>{I18n.t("profile.main.privacy.removeAccount.title")}</H1>
+          <H4 weight="Regular">
+            {I18n.t("profile.main.privacy.removeAccount.info.body")}
+          </H4>
+        </Content>
+        <FooterWithButtons
+          type="TwoButtonsInlineThird"
+          leftButton={cancelButtonProps}
+          rightButton={requestButtonProps}
+        />
+      </SafeAreaView>
+    </BaseScreenComponent>
+  );
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({});
 
