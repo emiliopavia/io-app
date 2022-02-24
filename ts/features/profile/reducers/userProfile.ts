@@ -86,10 +86,9 @@ export const selectUserProfileDeletionStatus = (
     () => pot.noneLoading,
     v => pot.noneUpdating(toBoolean(v?.status)),
     e => pot.noneError(e),
-    v =>
-      toBoolean(v?.status) ? pot.someUpdating(false, true) : pot.some(false),
+    v => pot.some(toBoolean(v?.status)),
     v => pot.someLoading(toBoolean(v?.status)),
-    (v, _) => pot.someUpdating(toBoolean(v?.status), true),
+    (o, n) => pot.someUpdating(toBoolean(o?.status), toBoolean(n?.status)),
     (v, e) => pot.someError(toBoolean(v?.status), e)
   );
 };
