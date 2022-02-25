@@ -12,7 +12,7 @@ import { H1 } from "../../../components/core/typography/H1";
 import I18n from "../../../i18n";
 import { H4 } from "../../../components/core/typography/H4";
 import FooterWithButtons from "../../../components/ui/FooterWithButtons";
-import { navigateBack } from "../../../store/actions/navigation";
+import { userProfileDeletionBack, userProfileDeletionCancel } from "../actions";
 
 type Props = ReturnType<typeof mapDispatchToProps> &
   ReturnType<typeof mapStateToProps> &
@@ -23,11 +23,11 @@ const ProfileDeletionWarningScreen = (props: Props): React.ReactElement => {
     block: true,
     light: true,
     bordered: true,
-    onPress: () => navigateBack(),
+    onPress: props.cancel,
     title: I18n.t("global.buttons.cancel")
   };
 
-  const requestButtonProps = {
+  const continueButtonProps = {
     block: true,
     primary: true,
     onPress: undefined,
@@ -35,7 +35,10 @@ const ProfileDeletionWarningScreen = (props: Props): React.ReactElement => {
   };
 
   return (
-    <BaseScreenComponent goBack={true} contextualHelp={emptyContextualHelp}>
+    <BaseScreenComponent
+      goBack={props.goBack}
+      contextualHelp={emptyContextualHelp}
+    >
       <SafeAreaView style={IOStyles.flex}>
         <Content>
           <H1>{I18n.t("profile.main.privacy.removeAccount.title")}</H1>
@@ -46,14 +49,17 @@ const ProfileDeletionWarningScreen = (props: Props): React.ReactElement => {
         <FooterWithButtons
           type="TwoButtonsInlineThird"
           leftButton={cancelButtonProps}
-          rightButton={requestButtonProps}
+          rightButton={continueButtonProps}
         />
       </SafeAreaView>
     </BaseScreenComponent>
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({});
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  goBack: () => dispatch(userProfileDeletionBack()),
+  cancel: () => dispatch(userProfileDeletionCancel())
+});
 
 const mapStateToProps = (state: GlobalState) => ({});
 
