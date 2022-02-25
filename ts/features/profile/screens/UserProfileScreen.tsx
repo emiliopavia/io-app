@@ -20,7 +20,7 @@ import {
 import BaseScreenComponent from "../../../components/screens/BaseScreenComponent";
 import I18n from "../../../i18n";
 import { useOnFirstRender } from "../../../utils/hooks/useOnFirstRender";
-import { getUserProfile } from "../actions";
+import { getUserProfile, userProfileDeletionStart } from "../actions";
 import Loader from "../components/Loader";
 import UserProfileItem from "../components/UserProfileItem";
 import NameSurnameIcon from "../../../../img/assistance/nameSurname.svg";
@@ -31,8 +31,6 @@ import { showToast } from "../../../utils/showToast";
 import { loadUserDataProcessing } from "../../../store/actions/userDataProcessing";
 import { UserDataProcessingChoiceEnum } from "../../../../definitions/backend/UserDataProcessingChoice";
 import UserProfileSwitch from "../components/UserProfileSwitch";
-import { useNavigationContext } from "../../../utils/hooks/useOnFocus";
-import PROFILE_DELETION_ROUTES from "../navigation/routes";
 
 type Props = ReturnType<typeof mapDispatchToProps> &
   ReturnType<typeof mapStateToProps>;
@@ -50,7 +48,6 @@ const iconProps = { width: 24, height: 24 };
 
 const UserProfileScreen = (props: Props): React.ReactElement => {
   const profile = useSelector(selectUserProfile);
-  const navigation = useNavigationContext();
 
   useOnFirstRender(() => {
     props.loadProfile();
@@ -110,11 +107,7 @@ const UserProfileScreen = (props: Props): React.ReactElement => {
             description={I18n.t("profile.main.privacy.removeAccount.title")}
             value={props.deletionStatus}
             onRetry={props.loadProfileDeletionStatus}
-            onEnable={() =>
-              navigation.navigate({
-                routeName: PROFILE_DELETION_ROUTES.START
-              })
-            }
+            onEnable={props.deleteUserProfile}
           />
         </ScrollView>
         {pot.isLoading(profile) && pot.isNone(profile) && <Loader />}
@@ -128,7 +121,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   loadProfileDeletionStatus: () =>
     dispatch(
       loadUserDataProcessing.request(UserDataProcessingChoiceEnum.DELETE)
-    )
+    ),
+  deleteUserProfile: () => dispatch(userProfileDeletionStart())
 });
 
 const mapStateToProps = (state: GlobalState) => ({
