@@ -22,41 +22,35 @@ const styles = StyleSheet.create({
   }
 });
 
-const ProfileDeletionCompletedScreen: React.FunctionComponent<Props> =
-  props => {
-    const continueButtonProps = {
-      block: true,
-      bordered: true,
-      primary: true,
-      onPress: props.back,
-      title: I18n.t("profile.main.privacy.removeAccount.success.cta")
-    };
-
-    const footerComponent = (
-      <FooterWithButtons
-        type={"SingleButton"}
-        leftButton={continueButtonProps}
-      />
-    );
-
-    return (
-      <BaseScreenComponent headerTitle={I18n.t("profile.main.title")}>
-        <SafeAreaView style={IOStyles.flex}>
-          <Content contentContainerStyle={styles.content}>
-            <Image source={expiredIcon} />
-            <View spacer={true} />
-            <H2>
-              {I18n.t("profile.main.privacy.removeAccount.success.title")}
-            </H2>
-            <H4 weight="Regular" style={{ textAlign: "center" }}>
-              {I18n.t("profile.main.privacy.removeAccount.success.body")}
-            </H4>
-          </Content>
-          {footerComponent}
-        </SafeAreaView>
-      </BaseScreenComponent>
-    );
+const ProfileDeletionSuccessScreen: React.FunctionComponent<Props> = props => {
+  const continueButtonProps = {
+    block: true,
+    bordered: true,
+    primary: true,
+    onPress: props.back,
+    title: I18n.t("profile.main.privacy.removeAccount.success.cta")
   };
+
+  const footerComponent = (
+    <FooterWithButtons type={"SingleButton"} leftButton={continueButtonProps} />
+  );
+
+  return (
+    <BaseScreenComponent headerTitle={I18n.t("profile.main.title")}>
+      <SafeAreaView style={IOStyles.flex}>
+        <Content contentContainerStyle={styles.content}>
+          <Image source={expiredIcon} />
+          <View spacer={true} />
+          <H2>{I18n.t("profile.main.privacy.removeAccount.success.title")}</H2>
+          <H4 weight="Regular" style={{ textAlign: "center" }}>
+            {I18n.t("profile.main.privacy.removeAccount.success.body")}
+          </H4>
+        </Content>
+        {footerComponent}
+      </SafeAreaView>
+    </BaseScreenComponent>
+  );
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   back: () => dispatch(userProfileDeletionBack())
@@ -65,4 +59,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export default connect(
   undefined,
   mapDispatchToProps
-)(ProfileDeletionCompletedScreen);
+)(ProfileDeletionSuccessScreen);

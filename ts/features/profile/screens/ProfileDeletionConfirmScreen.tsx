@@ -39,7 +39,7 @@ type Props = ReturnType<typeof mapDispatchToProps> &
   ReturnType<typeof mapStateToProps> &
   NavigationStackScreenProps;
 
-const ProfileDeletionSummaryScreen = (props: Props): React.ReactElement => {
+const ProfileDeletionConfirmScreen = (props: Props): React.ReactElement => {
   const cancelButtonProps = {
     block: true,
     light: true,
@@ -104,4 +104,4 @@ const mapStateToProps = (state: GlobalState) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProfileDeletionSummaryScreen);
+)(ProfileDeletionConfirmScreen);

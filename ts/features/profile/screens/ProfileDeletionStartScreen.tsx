@@ -17,7 +17,7 @@ import { useNavigationContext } from "../../../utils/hooks/useOnFocus";
 
 type Props = ReturnType<typeof mapDispatchToProps> & NavigationStackScreenProps;
 
-const ProfileDeletionWarningScreen = (props: Props): React.ReactElement => {
+const ProfileDeletionStartScreen = (props: Props): React.ReactElement => {
   const navigationContext = useNavigationContext();
   const confirmDeletion = () =>
     navigationContext.navigate(PROFILE_DELETION_ROUTES.CONFIRM);
@@ -63,4 +63,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export default connect(
   undefined,
   mapDispatchToProps
-)(ProfileDeletionWarningScreen);
+)(ProfileDeletionStartScreen);
