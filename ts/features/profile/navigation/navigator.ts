@@ -7,12 +7,16 @@ import {
 import ProfileDeletionWarningScreen from "../screens/ProfileDeletionWarningScreen";
 import { newProfileScreenEnabled } from "../../../config";
 import ProfileDeletionSummaryScreen from "../screens/ProfileDeletionSummaryScreen";
+import ProfileDeletionCompletedScreen from "../screens/ProfileDeletionCompletedScreen";
 import PROFILE_DELETION_ROUTES from "./routes";
 
 export const ProfileDeletionNavigator = createStackNavigator(
   {
     [PROFILE_DELETION_ROUTES.START]: { screen: ProfileDeletionWarningScreen },
-    [PROFILE_DELETION_ROUTES.CONFIRM]: { screen: ProfileDeletionSummaryScreen }
+    [PROFILE_DELETION_ROUTES.CONFIRM]: { screen: ProfileDeletionSummaryScreen },
+    [PROFILE_DELETION_ROUTES.SUCCESS]: {
+      screen: ProfileDeletionCompletedScreen
+    }
   },
   {
     headerMode: "none",

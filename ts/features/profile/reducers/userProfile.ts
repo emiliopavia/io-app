@@ -93,6 +93,22 @@ export const selectUserProfileDeletionStatus = (
   );
 };
 
+export const selectUserProfileDeletionRequest = createSelector(
+  selectUserProfileDeletionStatus,
+  (status: Pot<boolean, Error>): boolean => pot.isUpdating(status)
+);
+
+export const selectUserProfileDeletionError = createSelector(
+  selectUserProfileDeletionStatus,
+  (status: Pot<boolean, Error>): boolean => pot.isError(status)
+);
+
+export const selectUserProfileDeletionSuccess = createSelector(
+  selectUserProfileDeletionStatus,
+  (status: Pot<boolean, Error>): boolean =>
+    !pot.isLoading(status) && pot.isSome(status) && status.value === true
+);
+
 const userProfileReducer = (
   state: UserProfileState = pot.none,
   action: Action

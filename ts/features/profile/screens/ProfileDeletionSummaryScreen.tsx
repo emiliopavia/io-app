@@ -8,7 +8,6 @@ import {
   View
 } from "react-native";
 import { NavigationStackScreenProps } from "react-navigation-stack";
-import * as pot from "italia-ts-commons/lib/pot";
 import { GlobalState } from "../../../store/reducers/types";
 import { emptyContextualHelp } from "../../../utils/emptyContextualHelp";
 import BaseScreenComponent from "../../../components/screens/BaseScreenComponent";
@@ -19,8 +18,14 @@ import { userProfileDeletionCancel } from "../actions";
 import UserProfileDetails from "../components/UserProfileDetails";
 import { upsertUserDataProcessing } from "../../../store/actions/userDataProcessing";
 import { UserDataProcessingChoiceEnum } from "../../../../definitions/backend/UserDataProcessingChoice";
-import { selectUserProfileDeletionStatus } from "../reducers/userProfile";
+import {
+  selectUserProfileDeletionError,
+  selectUserProfileDeletionRequest,
+  selectUserProfileDeletionSuccess
+} from "../reducers/userProfile";
 import { showToast } from "../../../utils/showToast";
+import { useNavigationContext } from "../../../utils/hooks/useOnFocus";
+import PROFILE_DELETION_ROUTES from "../navigation/routes";
 
 const styles = StyleSheet.create({
   activityIndicator: {
@@ -50,31 +55,36 @@ const ProfileDeletionSummaryScreen = (props: Props): React.ReactElement => {
     title: I18n.t("global.buttons.continue")
   };
 
-  if (pot.isError(props.deletionStatus)) {
+  const navigation = useNavigationContext();
+  if (props.didSendDeletionRequest) {
+    navigation.navigate(PROFILE_DELETION_ROUTES.SUCCESS);
+  } else if (props.hasError) {
     showToast(I18n.t("global.genericError"), "danger");
   }
 
-  return (
-    <BaseScreenComponent goBack={true} contextualHelp={emptyContextualHelp}>
-      <SafeAreaView style={IOStyles.flex}>
-        {!pot.isUpdating(props.deletionStatus) && (
-          <>
-            <UserProfileDetails />
-            <FooterWithButtons
-              type="TwoButtonsInlineThird"
-              leftButton={cancelButtonProps}
-              rightButton={continueButtonProps}
-            />
-          </>
-        )}
-        {pot.isUpdating(props.deletionStatus) && (
-          <View style={styles.activityIndicator}>
-            <ActivityIndicator />
-          </View>
-        )}
-      </SafeAreaView>
-    </BaseScreenComponent>
-  );
+  {
+    return (
+      <BaseScreenComponent goBack={true} contextualHelp={emptyContextualHelp}>
+        <SafeAreaView style={IOStyles.flex}>
+          {!props.isSendingDeletionRequest && (
+            <>
+              <UserProfileDetails />
+              <FooterWithButtons
+                type="TwoButtonsInlineThird"
+                leftButton={cancelButtonProps}
+                rightButton={continueButtonProps}
+              />
+            </>
+          )}
+          {props.isSendingDeletionRequest && (
+            <View style={styles.activityIndicator}>
+              <ActivityIndicator />
+            </View>
+          )}
+        </SafeAreaView>
+      </BaseScreenComponent>
+    );
+  }
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -86,7 +96,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 const mapStateToProps = (state: GlobalState) => ({
-  deletionStatus: selectUserProfileDeletionStatus(state)
+  hasError: selectUserProfileDeletionError(state),
+  isSendingDeletionRequest: selectUserProfileDeletionRequest(state),
+  didSendDeletionRequest: selectUserProfileDeletionSuccess(state)
 });
 
 export default connect(

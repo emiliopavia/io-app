@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { Content } from "native-base";
 import { SafeAreaView } from "react-native";
 import { NavigationStackScreenProps } from "react-navigation-stack";
-import { GlobalState } from "../../../store/reducers/types";
 import { emptyContextualHelp } from "../../../utils/emptyContextualHelp";
 import BaseScreenComponent from "../../../components/screens/BaseScreenComponent";
 import { IOStyles } from "../../../components/core/variables/IOStyles";
@@ -16,9 +15,7 @@ import { userProfileDeletionCancel } from "../actions";
 import PROFILE_DELETION_ROUTES from "../navigation/routes";
 import { useNavigationContext } from "../../../utils/hooks/useOnFocus";
 
-type Props = ReturnType<typeof mapDispatchToProps> &
-  ReturnType<typeof mapStateToProps> &
-  NavigationStackScreenProps;
+type Props = ReturnType<typeof mapDispatchToProps> & NavigationStackScreenProps;
 
 const ProfileDeletionWarningScreen = (props: Props): React.ReactElement => {
   const navigationContext = useNavigationContext();
@@ -63,9 +60,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   cancel: () => dispatch(userProfileDeletionCancel())
 });
 
-const mapStateToProps = (state: GlobalState) => ({});
-
 export default connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps
 )(ProfileDeletionWarningScreen);
