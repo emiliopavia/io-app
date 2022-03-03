@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
   }
 });
 
-const Loader = (): React.ReactElement => (
-  <View style={styles.container}>
+const Loader = (props: { testID?: string }): React.ReactElement => (
+  <View style={styles.container} testID={props.testID}>
     <ActivityIndicator />
   </View>
 );

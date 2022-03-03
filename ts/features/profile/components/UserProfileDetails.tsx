@@ -48,6 +48,7 @@ const UserProfileDetails = (props: Props): React.ReactElement => {
             <RefreshControl
               refreshing={props.isLoading}
               onRefresh={props.loadProfile}
+              testID="user.profile.refreshControl"
             />
           ) : undefined
         }
@@ -57,6 +58,7 @@ const UserProfileDetails = (props: Props): React.ReactElement => {
             title={I18n.t("profile.data.list.nameSurname")}
             subtitle={props.fullName}
             icon={<NameSurnameIcon {...iconProps} />}
+            testID="user.profile.fullName"
           />
         )}
         {props.fiscalCode && (
@@ -64,6 +66,7 @@ const UserProfileDetails = (props: Props): React.ReactElement => {
             title={I18n.t("profile.fiscalCode.fiscalCode")}
             subtitle={props.fiscalCode}
             icon={<FiscalCodeIcon {...iconProps} />}
+            testID="user.profile.fiscalCode"
           />
         )}
         {props.email && (
@@ -71,6 +74,7 @@ const UserProfileDetails = (props: Props): React.ReactElement => {
             title={I18n.t("profile.data.list.email")}
             subtitle={props.email}
             icon={<EmailIcon {...iconProps} />}
+            testID="user.profile.email"
           />
         )}
         {props.birthdate?.toLocaleDateString && (
@@ -78,6 +82,7 @@ const UserProfileDetails = (props: Props): React.ReactElement => {
             title={I18n.t("profile.data.list.birthdate")}
             subtitle={props.birthdate.toLocaleDateString()}
             icon={<InfoIcon {...iconProps} />}
+            testID="user.profile.birthdate"
           />
         )}
         {props.children}

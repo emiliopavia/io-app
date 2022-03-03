@@ -9,6 +9,7 @@ type Props = Readonly<{
   title: string;
   subtitle: string;
   icon: React.ReactNode;
+  testID?: string;
 }>;
 
 const styles = StyleSheet.create({
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
 });
 
 const UserProfileItem = (props: Props): React.ReactElement => (
-  <View>
+  <View testID={props.testID}>
     <View style={styles.row}>
       <View style={styles.icon}>{props.icon}</View>
       <View>
