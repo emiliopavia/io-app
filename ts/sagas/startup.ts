@@ -33,6 +33,7 @@ import {
   bpdEnabled,
   euCovidCertificateEnabled,
   mvlEnabled,
+  newProfileScreenEnabled,
   pagoPaApiUrlPrefix,
   pagoPaApiUrlPrefixTest,
   svEnabled,
@@ -79,6 +80,7 @@ import { PinString } from "../types/PinString";
 import { SagaCallReturnType } from "../types/utils";
 import { isTestEnv } from "../utils/environment";
 import { deletePin, getPin } from "../utils/keychain";
+import { watchUserProfileSaga } from "../features/profile/sagas";
 import {
   startAndReturnIdentificationResult,
   watchIdentification
@@ -385,6 +387,11 @@ export function* initializeApplicationSaga(): Generator<Effect, void, any> {
   if (mvlEnabled) {
     // Start watching for MVL actions
     yield fork(watchMvlSaga, sessionToken);
+  }
+
+  if (newProfileScreenEnabled) {
+    // Start watching for profile actions
+    yield fork(watchUserProfileSaga, backendClient);
   }
 
   // Load the user metadata
