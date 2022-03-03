@@ -10,6 +10,17 @@ const loadingProfileWhenEmpty = {
   loadProfile: () => {}
 };
 
+const profileWithData = {
+  isEmpty: false,
+  isError: false,
+  fullName: "Citizen",
+  email: "email@pagopa.it",
+  fiscalCode: "XXXXXXXXXXXXXXXX",
+  birthdate: new Date(),
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  loadProfile: () => {}
+};
+
 describe("UserProfileDetails", () => {
   describe("given empty state", () => {
     describe("when loading", () => {
@@ -27,6 +38,17 @@ describe("UserProfileDetails", () => {
         expect(
           component.queryByTestId("user.profile.refreshControl")
         ).toBeNull();
+      });
+    });
+  });
+
+  describe("given profile data", () => {
+    describe("when loading", () => {
+      it("doesn't show the loader", () => {
+        const component = render(
+          <UserProfileDetails {...profileWithData} isLoading={true} />
+        );
+        expect(component.queryByTestId("user.profile.loader")).toBeNull();
       });
     });
   });
