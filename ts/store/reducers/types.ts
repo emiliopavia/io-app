@@ -3,6 +3,7 @@ import { VersionInfoState } from "../../common/versionInfo/store/reducers/versio
 
 import { BonusState } from "../../features/bonus/bonusVacanze/store/reducers";
 import { PersistedFeaturesState } from "../../features/common/store/reducers";
+import { UserProfileState } from "../../features/profile/reducers/userProfile";
 import { AppState } from "./appState";
 import { AssistanceToolsState } from "./assistanceTools";
 import { PersistedAuthenticationState } from "./authentication";
@@ -62,6 +63,7 @@ export type GlobalState = Readonly<{
   internalRouteNavigation: InternalRouteNavigationState;
   crossSessions: CrossSessionsState;
   assistanceTools: AssistanceToolsState;
+  userProfile: UserProfileState;
 }>;
 
 export type PersistedGlobalState = GlobalState & PersistPartial;
