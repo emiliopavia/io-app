@@ -1,18 +1,5 @@
 import React from "react";
-import { Dispatch } from "redux";
-import { connect, useSelector } from "react-redux";
-import * as pot from "italia-ts-commons/lib/pot";
 import { RefreshControl, ScrollView, StyleSheet } from "react-native";
-import { getUserProfile } from "../actions";
-import { GlobalState } from "../../../store/reducers/types";
-import {
-  selectUserBirthdate,
-  selectUserEmail,
-  selectUserFiscalCode,
-  selectUserFullName,
-  selectUserProfile,
-  selectUserProfileDeletionStatus
-} from "../reducers/userProfile";
 import I18n from "../../../i18n";
 import NameSurnameIcon from "../../../../img/assistance/nameSurname.svg";
 import FiscalCodeIcon from "../../../../img/assistance/fiscalCode.svg";
@@ -23,8 +10,17 @@ import { showToast } from "../../../utils/showToast";
 import UserProfileItem from "./UserProfileItem";
 import Loader from "./Loader";
 
-type Props = ReturnType<typeof mapDispatchToProps> &
-  ReturnType<typeof mapStateToProps> & { children?: React.ReactNode };
+export type Props = {
+  isLoading: boolean;
+  isEmpty: boolean;
+  isError: boolean;
+  fullName?: string;
+  email?: string;
+  fiscalCode?: string;
+  birthdate?: Date;
+
+  loadProfile: () => void;
+} & { children?: React.ReactNode };
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -35,13 +31,11 @@ const styles = StyleSheet.create({
 const iconProps = { width: 24, height: 24 };
 
 const UserProfileDetails = (props: Props): React.ReactElement => {
-  const profile = useSelector(selectUserProfile);
-
   useOnFirstRender(() => {
     props.loadProfile();
   });
 
-  if (pot.isError(profile)) {
+  if (props.isError) {
     showToast(I18n.t("global.genericError"), "danger");
   }
 
@@ -50,9 +44,9 @@ const UserProfileDetails = (props: Props): React.ReactElement => {
       <ScrollView
         style={styles.scrollView}
         refreshControl={
-          pot.isSome(profile) || pot.isError(profile) ? (
+          !props.isEmpty || props.isError ? (
             <RefreshControl
-              refreshing={pot.isLoading(profile)}
+              refreshing={props.isLoading}
               onRefresh={props.loadProfile}
             />
           ) : undefined
@@ -88,21 +82,11 @@ const UserProfileDetails = (props: Props): React.ReactElement => {
         )}
         {props.children}
       </ScrollView>
-      {pot.isLoading(profile) && pot.isNone(profile) && <Loader />}
+      {props.isLoading && props.isEmpty && (
+        <Loader testID="user.profile.loader" />
+      )}
     </>
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  loadProfile: () => dispatch(getUserProfile.request())
-});
-
-const mapStateToProps = (state: GlobalState) => ({
-  fullName: selectUserFullName(state),
-  email: selectUserEmail(state),
-  fiscalCode: selectUserFiscalCode(state),
-  birthdate: selectUserBirthdate(state),
-  deletionStatus: selectUserProfileDeletionStatus(state)
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserProfileDetails);
+export default UserProfileDetails;

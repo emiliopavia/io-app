@@ -14,14 +14,21 @@ import BaseScreenComponent from "../../../components/screens/BaseScreenComponent
 import { IOStyles } from "../../../components/core/variables/IOStyles";
 import I18n from "../../../i18n";
 import FooterWithButtons from "../../../components/ui/FooterWithButtons";
-import { userProfileDeletionCancel } from "../actions";
+import { getUserProfile, userProfileDeletionCancel } from "../actions";
 import UserProfileDetails from "../components/UserProfileDetails";
 import { upsertUserDataProcessing } from "../../../store/actions/userDataProcessing";
 import { UserDataProcessingChoiceEnum } from "../../../../definitions/backend/UserDataProcessingChoice";
 import {
+  selectUserBirthdate,
+  selectUserEmail,
+  selectUserFiscalCode,
+  selectUserFullName,
   selectUserProfileDeletionError,
   selectUserProfileDeletionRequest,
-  selectUserProfileDeletionSuccess
+  selectUserProfileDeletionSuccess,
+  selectUserProfileIsEmpty,
+  selectUserProfileIsError,
+  selectUserProfileIsLoading
 } from "../reducers/userProfile";
 import { showToast } from "../../../utils/showToast";
 import { useNavigationContext } from "../../../utils/hooks/useOnFocus";
@@ -68,7 +75,7 @@ const ProfileDeletionConfirmScreen = (props: Props): React.ReactElement => {
         <SafeAreaView style={IOStyles.flex}>
           {!props.isSendingDeletionRequest && (
             <>
-              <UserProfileDetails />
+              <UserProfileDetails {...props} />
               <FooterWithButtons
                 type="TwoButtonsInlineThird"
                 leftButton={cancelButtonProps}
@@ -88,6 +95,7 @@ const ProfileDeletionConfirmScreen = (props: Props): React.ReactElement => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  loadProfile: () => dispatch(getUserProfile.request()),
   cancel: () => dispatch(userProfileDeletionCancel()),
   deleteUserProfile: () =>
     dispatch(
@@ -96,6 +104,13 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 const mapStateToProps = (state: GlobalState) => ({
+  isLoading: selectUserProfileIsLoading(state),
+  isEmpty: selectUserProfileIsEmpty(state),
+  isError: selectUserProfileIsError(state),
+  fullName: selectUserFullName(state),
+  email: selectUserEmail(state),
+  fiscalCode: selectUserFiscalCode(state),
+  birthdate: selectUserBirthdate(state),
   hasError: selectUserProfileDeletionError(state),
   isSendingDeletionRequest: selectUserProfileDeletionRequest(state),
   didSendDeletionRequest: selectUserProfileDeletionSuccess(state)
