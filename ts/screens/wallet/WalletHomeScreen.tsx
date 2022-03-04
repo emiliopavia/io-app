@@ -24,7 +24,11 @@ import SectionCardComponent, {
 import TransactionsList from "../../components/wallet/TransactionsList";
 import WalletHomeHeader from "../../components/wallet/WalletHomeHeader";
 import WalletLayout from "../../components/wallet/WalletLayout";
-import { bonusVacanzeEnabled, bpdEnabled } from "../../config";
+import {
+  bonusVacanzeEnabled,
+  bpdEnabled,
+  newProfileScreenEnabled
+} from "../../config";
 import RequestBonus from "../../features/bonus/bonusVacanze/components/RequestBonus";
 import {
   navigateToAvailableBonusScreen,
@@ -89,6 +93,7 @@ import customVariables from "../../theme/variables";
 import { Transaction, Wallet } from "../../types/pagopa";
 import { isStrictSome } from "../../utils/pot";
 import { showToast } from "../../utils/showToast";
+import UserDeleteWalletButton from "../../features/profile/components/UserDeleteWalletButton";
 
 type NavigationParams = Readonly<{
   newMethodAdded: boolean;
@@ -570,6 +575,7 @@ class WalletHomeScreen extends React.PureComponent<Props, State> {
             {(bpdEnabled || this.props.isCgnEnabled) && (
               <FeaturedCardCarousel />
             )}
+            {newProfileScreenEnabled && <UserDeleteWalletButton />}
             {transactionContent}
           </>
         )}

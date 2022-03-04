@@ -58,6 +58,7 @@ import WalletHomeScreen from "../screens/wallet/WalletHomeScreen";
 import PaypalDetailScreen from "../features/wallet/paypal/screen/PaypalDetailScreen";
 import { paypalOnboardingNavigator } from "../features/wallet/onboarding/paypal/navigation/navigator";
 import PAYPAL_ROUTES from "../features/wallet/onboarding/paypal/navigation/routes";
+import { profileDeletionRouteConfig } from "../features/profile/navigation/navigator";
 import ROUTES from "./routes";
 
 const baseRouteConfigMap = {
@@ -218,7 +219,8 @@ const routeConfig = {
   ...bonusVacanzeConfigMap,
   ...bpdConfigMap,
   ...paypalConfigMap,
-  ...optInPaymentMethodsConfigMap
+  ...optInPaymentMethodsConfigMap,
+  ...profileDeletionRouteConfig
 };
 
 /**
