@@ -21,6 +21,8 @@ import { Showroom } from "../screens/showroom/Showroom";
 import ServicesPreferenceScreen from "../screens/profile/ServicesPreferenceScreen";
 import ProfileDataScreen from "../screens/profile/ProfileDataScreen";
 import SecurityScreen from "../screens/profile/SecurityScreen";
+import { newProfileScreenEnabled } from "../config";
+import UserProfileScreen from "../features/profile/screens/UserProfileScreen";
 import ROUTES from "./routes";
 
 /**
@@ -44,7 +46,7 @@ const ProfileNavigator = createStackNavigator(
       screen: PreferencesScreen
     },
     [ROUTES.PROFILE_DATA]: {
-      screen: ProfileDataScreen
+      screen: newProfileScreenEnabled ? UserProfileScreen : ProfileDataScreen
     },
     [ROUTES.PROFILE_SECURITY]: {
       screen: SecurityScreen
