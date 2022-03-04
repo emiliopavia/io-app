@@ -13,8 +13,23 @@ import { UserDataProcessingStatusEnum } from "../../../../definitions/backend/Us
 
 export type UserProfileState = pot.Pot<InitializedProfile, Error>;
 
-export const selectUserProfile = (state: GlobalState): UserProfileState =>
+const selectUserProfile = (state: GlobalState): UserProfileState =>
   state.userProfile;
+
+export const selectUserProfileIsLoading = createSelector(
+  selectUserProfile,
+  (userProfile: UserProfileState): boolean => pot.isLoading(userProfile)
+);
+
+export const selectUserProfileIsEmpty = createSelector(
+  selectUserProfile,
+  (userProfile: UserProfileState): boolean => pot.isNone(userProfile)
+);
+
+export const selectUserProfileIsError = createSelector(
+  selectUserProfile,
+  (userProfile: UserProfileState): boolean => pot.isError(userProfile)
+);
 
 export const selectUserEmail = createSelector(
   selectUserProfile,
@@ -106,7 +121,7 @@ export const selectUserProfileDeletionError = createSelector(
 export const selectUserProfileDeletionSuccess = createSelector(
   selectUserProfileDeletionStatus,
   (status: Pot<boolean, Error>): boolean =>
-    !pot.isLoading(status) && pot.isSome(status) && status.value === true
+    !pot.isLoading(status) && pot.isSome(status) && status.value
 );
 
 const userProfileReducer = (
